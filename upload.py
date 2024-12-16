@@ -9,10 +9,10 @@ from langchain_community.tools import DuckDuckGoSearchRun
 import dotenv
 dotenv.load_dotenv()
 
-huggingface_ef = embedding_functions.HuggingFaceEmbeddingFunction(
-    model_name="sentence-transformers/all-MiniLM-L6-v2", api_key=os.getenv("HUGGINGFACE_API_KEY")
-)
-
+openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+                api_key=os.environ.get("OPENAI_API_KEY"),
+                model_name="text-embedding-3-small"
+            )
 
 url_to_name_map = {
     "https://lilianweng.github.io/posts/2023-06-23-agent/": "Agent_Post",
@@ -50,7 +50,7 @@ def upload_data_to_collection(collection_name, data):
     try:
         collection = create_collection(collection_name)
         id = random.randint(10000, 99999)
-        embedding = huggingface_ef([data])[0]  
+        embedding = openai_ef([data])[0]  
         
         collection.add(
             documents=[data],
@@ -66,7 +66,7 @@ def upload_data_to_collection(collection_name, data):
 
 
 # for url, splits in doc_splits.items():
-#     collection_name = url_to_name_map[url]  # Use the custom name for each URL
+#     collection_name = url_to_name_map[url]  
 #     for chunk in splits:
 #         upload_data_to_collection(collection_name, chunk.page_content)
 
@@ -80,7 +80,7 @@ def search_db(collection_name: str, input_query: str, n=5):
         collection = create_collection(collection_name)
         print("\n\nSearching {}\n\n".format(collection))
         
-        embedding = huggingface_ef([input_query])[0]  
+        embedding = openai_ef([input_query])[0]  
         
         res = collection.query(
             query_embeddings=[embedding],
@@ -104,5 +104,5 @@ def Internet_search(input:str):
     return res
 
 
-# search_results = search_db("Agent_Post", "what are ai agents?")
-# print(search_results)
+search_results = search_db("Agent_Post", "what are ai agents?")
+print(search_results)
