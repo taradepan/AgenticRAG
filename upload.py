@@ -104,5 +104,5 @@ def Internet_search(input:str):
     return res
 
 
-search_results = search_db("Agent_Post", "what are ai agents?")
-print(search_results)
+# search_results = search_db("Agent_Post", "what are ai agents?")
+# print(search_results)
