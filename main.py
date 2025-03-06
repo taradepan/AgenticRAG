@@ -55,7 +55,7 @@ def run_conversation(user_input):
                         "content": function_response,
                     }
                 )  
-        second_response = client.chat.completions.create(model="gpt-4o-mini",messages= messages,max_tokens=50)
+        second_response = client.chat.completions.create(model="gpt-4o-mini",messages= messages,max_tokens=1000)
         output=second_response.choices[0].message.content
         return str(output)
     else:
